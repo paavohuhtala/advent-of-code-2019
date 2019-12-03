@@ -1,0 +1,4 @@
+.stack-work/
+advent2019-hs.cabal
+*~
+dist
