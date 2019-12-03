@@ -1,4 +1,4 @@
-import Advent2019 (day1, day2, day3)
+import           Advent2019 (day1, day2, day3)
 
 main :: IO ()
 main = do
