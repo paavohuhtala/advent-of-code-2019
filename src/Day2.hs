@@ -2,7 +2,7 @@ module Day2 (day2) where
 
 import Data.List.Split (splitOn)
 import Control.Monad.ST
-import Data.Array.ST
+import Data.Array.ST (STArray, readArray, writeArray, newListArray)
 
 data ProgramState = Halt Int | Error String deriving (Eq, Show)
 
@@ -53,10 +53,10 @@ day2b initial = do
     let range = [0..99]
     let target = 19690720
     let [(noun, verb)] = [
-            (noun, verb) |
-            noun <- range,
-            verb <- range,
-            (Halt target) == (runST $ (createState initial (noun, verb)) >>= runProgram) ] 
+            (n, v) |
+            n <- range,
+            v <- range,
+            (Halt target) == (runST $ (createState initial (n, v)) >>= runProgram) ] 
     putStr "Day2b: "
     putStrLn $ show $ 100 * noun + verb
 

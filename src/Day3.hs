@@ -1,12 +1,9 @@
 module Day3 (day3) where
 
-import Data.List (scanl, sortBy)
+import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.List.Split (splitOn)
-import Data.Array.ST
 import Data.Maybe (mapMaybe)
-import Control.Monad.ST
-import Debug.Trace
 
 import qualified Data.Map.Strict as Map
 
@@ -31,8 +28,13 @@ asIntersection :: (Pos, Cell) -> Maybe Intersection
 asIntersection (pos, (Both t)) = Just $ Intersection (pos, t) 
 asIntersection _               = Nothing
 
-applyMovements :: WireType -> [Movement] -> Grid -> Grid
-applyMovements wireType movements grid = fst3 $ foldl (applyMovement wireType) (grid, (0, 0), 0) movements
+applyMovement :: WireType -> (Grid, Pos, Int) -> Movement -> (Grid, Pos, Int)
+applyMovement _        (grid, pos, dist) (_, 0)     = (grid, pos, dist)
+applyMovement wireType (grid, pos, dist) (dir, len) =
+    let newDist = dist + 1 in
+    let newPos = applyDir pos dir in
+    let newGrid = applyWire wireType newDist newPos grid in
+    applyMovement wireType (newGrid, newPos, newDist) (dir, len - 1)
   where 
     applyDir :: Pos -> Dir -> Pos
     applyDir (x, y) DUp    = (x, y + 1)
@@ -41,21 +43,17 @@ applyMovements wireType movements grid = fst3 $ foldl (applyMovement wireType) (
     applyDir (x, y) DRight = (x + 1, y)
 
     applyCell :: WireType -> Int -> Maybe Cell -> Maybe Cell
-    applyCell w dist Nothing                             = Just $ One (w, dist)
-    applyCell w _ (Just (One (w', dist)))      | w == w' = Just $ One (w, dist)
-    applyCell w dist1 (Just (One (w', dist2))) | w /= w' = Just $ Both (dist1, dist2)
-    applyCell a b c                                      = error $ show (a, b, c)
+    applyCell w d Nothing                          = Just $ One (w, d)
+    applyCell w _ (Just (One (w', d)))   | w == w' = Just $ One (w, d)
+    applyCell w d1 (Just (One (w', d2))) | w /= w' = Just $ Both (d1, d2)
+    applyCell a b c                                = error $ show (a, b, c)
 
     applyWire :: WireType -> Int -> Pos -> Grid -> Grid
-    applyWire wireType dist pos = Map.alter (applyCell wireType dist) pos 
+    applyWire w d p = Map.alter (applyCell w d) p 
 
-    applyMovement :: WireType -> (Grid, Pos, Int) -> Movement -> (Grid, Pos, Int)
-    applyMovement _        (grid, pos, dist) (dir, 0)   = (grid, pos, dist)
-    applyMovement wireType (grid, pos, dist) (dir, len) =
-        let newDist = dist + 1 in
-        let newPos = applyDir pos dir in
-        let newGrid = applyWire wireType newDist newPos grid in
-        applyMovement wireType (newGrid, newPos, newDist) (dir, len - 1)
+applyMovements :: WireType -> [Movement] -> Grid -> Grid
+applyMovements wireType movements grid =
+    fst3 $ foldl (applyMovement wireType) (grid, (0, 0), 0) movements
 
 findIntersections :: [Movement] -> [Movement] -> [Intersection]
 findIntersections a b =
@@ -78,12 +76,15 @@ day3 :: IO ()
 day3 = do
     inputText <- readFile "./day3.txt"
     let [wireA, wireB] = fmap (fmap readMovement . splitOn ",") $ splitOn "\n" inputText
+    putStr "Day3a: "
     putStrLn $ show $ day3a wireA wireB
+    putStr "Day3b: "
     putStrLn $ show $ day3b wireA wireB
     return ()
     where
         readMovement :: String -> Movement
-        readMovement ('U' : tail) = (DUp, read tail)
-        readMovement ('D' : tail) = (DDown, read tail)
-        readMovement ('L' : tail) = (DLeft, read tail)
-        readMovement ('R' : tail) = (DRight, read tail)
+        readMovement ('U' : dist) = (DUp, read dist)
+        readMovement ('D' : dist) = (DDown, read dist)
+        readMovement ('L' : dist) = (DLeft, read dist)
+        readMovement ('R' : dist) = (DRight, read dist)
+        readMovement command = error $ "Unknown command: " ++ command
