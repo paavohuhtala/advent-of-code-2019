@@ -64,8 +64,7 @@ day2b initial = do
         [ (n, v)
         | n <- range
         , v <- range
-        , (Halt target) ==
-            (runST $ (createState initial (n, v)) >>= runProgram)
+        , (Halt target) == (runST $ (createState initial (n, v)) >>= runProgram)
         ]
   putStr "Day2b: "
   putStrLn $ show $ 100 * noun + verb

@@ -1,8 +1,6 @@
-import           Advent2019 (day1, day2, day3)
+import           Advent2019 (day1, day2, day3, day4)
 
 main :: IO ()
 main = do
-  day1
-  day2
-  day3
+  day4
   return ()
