@@ -11,10 +11,10 @@ noDecrease x =
   noDecreaseHelper a rest
   where
     noDecreaseHelper :: Int -> [Int] -> Bool
-    noDecreaseHelper max [] = True
-    noDecreaseHelper max (a:rest)
+    noDecreaseHelper _ [] = True
+    noDecreaseHelper max (a:_)
       | max > a = False
-    noDecreaseHelper max (a:rest) = noDecreaseHelper a rest
+    noDecreaseHelper _ (a:rest) = noDecreaseHelper a rest
 
 day4a :: [Int] -> Int
 day4a range =
