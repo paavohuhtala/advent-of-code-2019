@@ -24,6 +24,7 @@ dependencies:
 - split
 - containers
 - vector
+- search-algorithms
 
 library:
   source-dirs: src

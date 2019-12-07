@@ -40,6 +40,7 @@ packages:
 extra-deps:
 - hindent-5.3.1@sha256:23dc3d423820a1de4a11f54eb87992f2c9fa1b686b2230bb06d1af46edc85c4b,3452
 - stylish-haskell-0.9.4.4@sha256:ea514922e47ea05a924355a841abd26d18101037c46fbb90e201ae83582a8728,4953
+- search-algorithms-0.3.1@sha256:83d487688e79f7d354a638d893364cd34cb01352cac9281734c27ee640e31925,1825
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
