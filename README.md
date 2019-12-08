@@ -7,6 +7,7 @@
 * [Day 3](./haskell/src/Day3.hs)
 * [Day 4](./haskell/src/Day4.hs)
 * [Day 5 (not working)](./haskell/src/Day5.hs)
+* [Day 6](./haskell/src/Day6.hs)
 
 Magic development snippet:
 
@@ -15,3 +16,5 @@ Magic development snippet:
 ## Rust
 
 * [Day 5](./rust/src/day5.rs)
+* [Day 7](./rust/src/day7.rs)
+* [Day 8](./rust/src/day8.rs)
