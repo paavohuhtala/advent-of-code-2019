@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::intcode::{parse_program, VMState, VM};
 use permutohedron::Heap;
 use std::fs;

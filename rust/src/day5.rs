@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use crate::intcode::{parse_program, VM};
 use std::fs;
 
